@@ -1,4 +1,5 @@
 var User = require(process.cwd() + '/app/models/users.js');
+var bcrypt = require('bcrypt-nodejs');
 
 
 
@@ -59,6 +60,44 @@ function UserController(passport){
 				res.redirect(req.session.returnTo || '/');
 			});
 		})(req, res, next);
+	}
+
+	//POST /settings
+	this.postChangePassword = function(req, res, next){
+		console.log(req.body)
+		console.log(req.user);
+		var currentPassword = bcrypt.compareSync(req.body.current_password, req.user.password);
+
+		if(!currentPassword){
+			req.flash('error', 'Current password is  incorrect.')
+			res.redirect('/settings')
+		}
+		if(!req.body.new_password){
+			req.flash('error', 'New password field is empty.');
+			res.redirect('/settings');
+		}
+		if(req.body.new_password){
+			User.findOne({email: req.user.email}, function(err, user){
+				if(err){
+					throw err;
+				}
+				console.log(user);
+				user.password = req.body.new_password;
+				user.save(function(err){
+					if(err){
+						throw err;
+					}
+				});
+
+			});
+		}
+
+		req.flash('success', 'Your password has been changed');
+		res.redirect('/settings');
+
+
+
+
 	}
 
 }

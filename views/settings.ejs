@@ -1,14 +1,20 @@
 <%- include('./partials/header') -%>
 
+<% if(messages.error){ %>
+  <p><%= messages.error %></p>
+<% } %>
+<% if(messages.success){ %>
+  <p><%= messages.success %></p>
+<% } %>
 <form class="container password-container" action="" method="POST">
   <h1>Change Password</h1>
   <div class="form-group">
     <label for="currentPassword">CurrentPassword</label>
-    <input type="text" class="form-control" id="currentPassword">
+    <input type="text" class="form-control" id="currentPassword" name="current_password">
   </div>
   <div class="form-group">
     <label for="newPassword">New Password</label>
-    <input type="text" class="form-control" id="New Password">
+    <input type="text" class="form-control" id="New Password" name="new_password">
   </div>
   
   <button type="submit" class="btn btn-success">Save changes</button>

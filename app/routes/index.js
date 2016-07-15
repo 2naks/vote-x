@@ -50,7 +50,9 @@ module.exports = function (app, passport) {
 		.get(isLoggedIn, function (req, res) {
 			console.log(req.user);
 			res.render(path + '/views/settings.ejs', {title:"Welcome"});
-		});
+		})
+		.post(isLoggedIn,userController.postChangePassword);
+
 
 	app.route('/mypolls')
 		.get(isLoggedIn, function (req, res) {
