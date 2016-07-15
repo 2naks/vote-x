@@ -1,0 +1,7 @@
+<%- include('./partials/header') -%>
+	<% if(!user){ %>
+		<%- include('home') -%>
+	<% }else{ %>
+		<%- include('dashboard') -%>
+	<% } %>
+<%- include('./partials/footer') -%>

@@ -1,0 +1,28 @@
+<%- include('./partials/header') -%>
+<body>
+	<div  class="intro container-fluid">
+			<div class="intro-div row-fluid">
+				<div class="text-center">
+					<h1><b>Votex</b></h1>
+					<p class="h4">Create custom polls with live results</p>
+				</div>
+			</div>
+	</div>
+
+<form class="container" action="/login" method="POST">
+  <div class="form-group">
+    <label for="email">Email address</label>
+    <input type="email" name="email" class="form-control" id="email" placeholder="Email">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  
+  <button type="submit" class="btn btn-success">Login</button>
+  <a href="/login"><button type="button" class="btn btn-default"><i class="fa fa-facebook-square"></i> Connect with Facebook</button></a>
+</form>
+
+</body>
+
+<%- include('./partials/footer') -%>

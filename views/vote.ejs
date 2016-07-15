@@ -1,0 +1,36 @@
+<%- include('./partials/header') -%>
+	<body>
+		<div  class="intro container-fluid">
+			<div class="intro-div row-fluid">
+				<div class="text-center">
+					<h2><b>Dashboard</b></h2>
+					<p class="h5">What would like to do today?</p>
+					<a href=""><button class="btn btn-default">New Poll</button></a>
+					<a href=""><button class="btn btn-default">My Polls</button></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="container vote-container">
+			<div class="row">
+				<div class="col-md-6">
+					<p class="h3">What is the name of your pet?<span class="h6"><br>by <span>Emmanuel</span><span></p>
+				</div>
+				<div class="col-md-6">
+					<form class="container-fluid" action="/poll" method="GET">
+						<label><input type="radio" name="choice"><span> Dog</span></label><br>						
+						<label><input type="radio" name="choice"><span> Cat</span></label><br>
+						<input type="submit" value="Vote" class="btn btn-primary">
+					</form>
+				</div>
+			</div>
+
+		</div>
+	
+
+	<%- include('./partials/footer') -%>
+	</body>
+
+	
+
+</html>
