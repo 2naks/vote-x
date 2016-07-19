@@ -59,9 +59,19 @@ module.exports = function (app, passport) {
 			res.render(path + '/views/mypolls.ejs', {title:"Welcome"});
 		});
 
+	app.route('/newpoll')
+		.get(isLoggedIn, function (req, res) {
+			res.render(path + '/views/index.ejs', {title:"Welcome"});
+		});
+
+	app.route('/pollsuccess')
+		.get(function (req, res) {
+			res.render(path + '/views/pollsuccess.ejs', {title:"Welcome"});
+		});
+
 	app.route('/pollresult')
 		.get(function (req, res) {
-			res.render(path + '/views/pollresult.ejs', {title:"Welcome"});
+			res.render(path + '/views/index.ejs', {title:"Welcome"});
 		});
 
 
