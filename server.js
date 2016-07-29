@@ -33,8 +33,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(function(req, res, next){
 	res.locals.user = req.user; // req.user is populated by passportjs
+	
 	next();
 });
+
 /*app.use(function(req, res, next){
 	//if(path condition){req.session.returnTo = req.path;}
 });*/

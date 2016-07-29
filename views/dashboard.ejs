@@ -16,26 +16,36 @@
 		
 		
 
-		<form class="container newpoll" action="" method="POST">
+		<form class="container newpoll" action="/newpoll" method="POST">
 		<h3>New Poll</h3>
   			<div class="form-group">
     				<label for="email">Name your poll</label>
-   			 <input type="email" class="form-control" id="email" placeholder="What's your favorite pet?">
+   			 <input type="text" class="form-control" name="name"  placeholder="What's your favorite pet?">
   			</div>
-  			<div class="form-group">
-    				<label for="exampleInputPassword1">Options</label>
-   					 <input type="password" class="form-control" id="options" placeholder="Dog">
-   					 <input type="password" class="form-control" id="options" placeholder="Cat">
+  			<div id="options" class="form-group">
+    				<label for="options">Options</label>
+   					 <input type="text" class="form-control" name="options" placeholder="Dog">
+   					 <input type="text" class="form-control" name="options" placeholder="Cat">
  			 </div>
- 			 <div class="btn-group btn-group-vertica">
-  				<button class="btn btn-default block">More Options</button>
+ 			 <div  class="btn-group btn-group-vertica">
+  				<button id="more-options" class="btn btn-default block">More Options</button>
   				<button type="submit" class="btn btn-success">Submit</button>
  			 </div>
  			 
- 			 <div class="btn-group ">
-  				
- 			 </div>
 		</form>
+		<script type="text/javascript">
+			var options = document.querySelector("#options");
+			var moreOptions = document.querySelector("#more-options");
+
+			moreOptions.addEventListener('click',function(evt){
+				evt.preventDefault();
+				var option = document.createElement("input");
+				option.type = "text";
+				option.name = "options";
+				option.className = "form-control";
+				options.appendChild(option);
+			},true)
+		</script>
 
 		
 

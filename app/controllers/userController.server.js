@@ -1,5 +1,6 @@
 var User = require(process.cwd() + '/app/models/users.js');
 var bcrypt = require('bcrypt-nodejs');
+var slug = require('slugid');
 
 
 
@@ -32,8 +33,8 @@ function UserController(passport){
 				});
 			});
 		});
-
 	}
+
 
 	//POST /login
 	this.postLogin = function(req, res,next){
@@ -61,6 +62,7 @@ function UserController(passport){
 			});
 		})(req, res, next);
 	}
+
 
 	//POST /settings
 	this.postChangePassword = function(req, res, next){
@@ -94,11 +96,81 @@ function UserController(passport){
 
 		req.flash('success', 'Your password has been changed');
 		res.redirect('/settings');
-
-
-
-
 	}
 
+	this.postNewPoll = function(req, res, next){
+		
+		User.findOne({email: req.user.email}, function(err, user){
+				if(err){
+					throw err;
+				}
+				console.log(req.body)
+				var pollOptions = [];
+				req.body.options.forEach(function(option){
+					pollOptions.push({label: option, value: 1});
+				});
+				console.log(pollOptions);
+				var slugID = slug.nice();
+				user.polls.push({name: req.body.name, options: pollOptions, createdBy: req.user.name, slug: slugID});
+				//user.polls = []; // To wipe polls
+				user.save(function(err){
+					if(err){
+						throw err;
+					}
+					console.log(slugID);
+					req.flash('slug','/polls/' + slugID);
+					res.redirect('/pollsuccess');
+			}); 		
+		});	
+	}
+
+	this.getPoll = function(req, res,next){
+
+		User.findOne({'polls.slug': req.params.slug}, function(err, user){
+			if(err){
+				throw err;
+			}
+			
+
+			user.polls.forEach(function(poll){
+				if(poll.slug == req.params.slug ){
+						//console.log(poll);
+						//console.log(poll.options);
+						//res.locals.user.password = "";
+						console.log(poll.slug)
+						return res.json(poll);
+				}
+			});
+
+
+		});
+		
+	}
+
+	this.getMyPolls = function(req, res, next){
+		if(req.user.polls == []){
+			res.json({'info': 'No polls found'});
+		}
+
+		res.json(req.user.polls);
+	}
+
+	this.getDeletePoll = function(req, res, next){
+		if(req.user.polls == []){
+			res.json({'info': 'No polls found'});
+		}
+
+		User.findOneAndUpdate({'polls.slug': req.params.slug},
+		 {$pull: { polls: {slug: req.params.slug}}},
+		 function(err, user){
+			if(err){
+				throw err;
+			}
+
+			req.flash('delete', 'Poll has been deleted');
+			res.redirect('/mypolls');
+		});
+	}
 }
+
 module.exports = UserController;

@@ -5,23 +5,22 @@ var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt-nodejs');
 
 var PollOptionsSchema = new Schema({
-	name:String,
-	count: Number
+	label:String,
+	value: Number
 });
 
 var PollSchema = new Schema({
 	name:String,
 	options:[PollOptionsSchema],
-	createdBy: String
+	createdBy: String,
+	slug: String
 });
 
 var UserSchema = new Schema({
 	name: {type: String},
 	email: {type: String, required: true, lowercase: true, unique: true},
 	password: String,
-
 	polls:[PollSchema]
-
 
 });
 

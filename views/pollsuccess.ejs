@@ -11,11 +11,16 @@
 			</div>
 		</div>
 		
-	<div class="link-container pollsuccess">
+	<div id="chart" class="link-container pollsuccess">
 		<h3>Congratulations!</h3>
 		<h5>Your poll has been posted to</h5>
-		<a href=""><span></span></a>
+		<a href= <%=messages.slug%> ><span id='poll'></span></a>
 	</div>
+	<script type="text/javascript">
+		var span = document.querySelector('#poll');
+		var link = document.querySelector("#chart > a")
+		span.innerHTML = link.href ;
+	</script>
 
 	<%- include('./partials/footer') -%>
 	</body>

@@ -1,9 +1,8 @@
 'use strict';
 
 var path = process.cwd();
-var UserController =require('../controllers/userController.server.js')
-
-
+var UserController =require('../controllers/userController.server.js');
+var slugid = require('slugid');
 
 module.exports = function (app, passport) {
 	var userController = new UserController(passport);
@@ -16,9 +15,13 @@ module.exports = function (app, passport) {
 		}
 	}
 
-	
 
 	app.route('/')
+		.get(isLoggedIn, function (req, res) {
+			res.render(path + '/views/index.ejs', {title:"Welcome"});
+		});
+
+	app.route('/index')
 		.get(isLoggedIn, function (req, res) {
 			res.render(path + '/views/index.ejs', {title:"Welcome"});
 		});
@@ -48,7 +51,6 @@ module.exports = function (app, passport) {
 
 	app.route('/settings')
 		.get(isLoggedIn, function (req, res) {
-			console.log(req.user);
 			res.render(path + '/views/settings.ejs', {title:"Welcome"});
 		})
 		.post(isLoggedIn,userController.postChangePassword);
@@ -62,17 +64,18 @@ module.exports = function (app, passport) {
 	app.route('/newpoll')
 		.get(isLoggedIn, function (req, res) {
 			res.render(path + '/views/index.ejs', {title:"Welcome"});
-		});
+		})
+		.post(isLoggedIn, userController.postNewPoll);
 
 	app.route('/pollsuccess')
 		.get(function (req, res) {
 			res.render(path + '/views/pollsuccess.ejs', {title:"Welcome"});
 		});
 
-	app.route('/pollresult')
+	/*app.route('/pollresult')
 		.get(function (req, res) {
-			res.render(path + '/views/index.ejs', {title:"Welcome"});
-		});
+			res.render(path + '/views/pollresult.ejs', {title:"Welcome"});
+		});*/
 
 
 	app.route('/vote')
@@ -80,11 +83,22 @@ module.exports = function (app, passport) {
 			res.render(path + '/views/vote.ejs', {title:"Welcome"});
 		});
 
-	app.route(isLoggedIn,'/pollsuccess')
-		.get(function (req, res) {
+	app.route('/pollsuccess')
+		.get(isLoggedIn, function (req, res, next) {
 			res.render(path + '/views/pollsuccess.ejs', {title:"Welcome"});
 		});
 
+	app.route('/polls/:slug')
+		.get(function(req, res){
+			res.render(path + '/views/pollresult.ejs', {title:"Welcome"});
+		});
 
-		
+	app.route('/pollapi/mypolls')
+		.get(isLoggedIn, userController.getMyPolls);	
+
+	app.route('/pollapi/:slug')
+		.get(userController.getPoll);	
+
+	app.route('/delete/polls/:slug')
+		.get(userController.getDeletePoll);
 };

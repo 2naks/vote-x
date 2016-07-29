@@ -13,26 +13,54 @@
 			</div>
 		</div>
 
-		<div class = "container list-group-container mypolls">
-				  <li class="list-group-item">
-					<span class=" badge btn btn-default">Delete</span>
+		<div id="mypolls" class = "container list-group-container mypolls">
+				  <a><li class='list-group-item'>
+					<span class=' badge btn btn-default'>Delete</span>
 					    Cras justo odio
-				 </li>
+				 </li></a>
 
 				 <li class="list-group-item">
 					<span class=" badge btn btn-default">Delete</span>
 					    Cras justo odio
 				 </li>
 
-				 <li class="list-group-item">
+				<!-- <li class="list-group-item">
 					<span class="badge btn btn-default" style="padding:10px border-radius:0">Delete</span>
 					    Cras justo odio
-				 </li>
+				 </li> -->
 				 
 			</ul>
 		</div>
 		
 		<%- include('./partials/footer') -%>
+		<script type="text/javascript" src="/public/js/fetch.js"></script>
+		<script type="text/javascript">
+			fetch('/pollapi/mypolls',{
+ 			 credentials: 'same-origin'
+			}).then(function(response){
+
+				console.log("Result: " + "Gotten");
+				console.log(response)
+
+				
+				 
+				return response.json();
+
+
+			}).then(function(json){
+				console.log(json);
+				json.forEach(function(poll){
+					console.log(poll.name);
+					var list = document.createElement("li");
+					list.className = "list-group-item";
+					list.innerHTML = "<span class='badge btn btn-default'><a href="+'/delete/polls/' + poll.slug+">Delete</a></span>" + "<a href="+'/polls/' + poll.slug +">" + poll.name ;
+
+					document.querySelector('#mypolls').appendChild(list);
+				});
+
+			})
+				
+		</script>
 	</body>
 
 </html>
