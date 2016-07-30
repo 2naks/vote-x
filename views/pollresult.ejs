@@ -25,11 +25,11 @@
 					<form>
 						<h4>Options</h4>
 						<select multiple class="form-control">
-						  <option>1</option>
+						 <!-- <option>1</option>
 						  <option>2</option>
 						  <option>3</option>
 						  <option>4</option>
-						  <option>5</option>
+						  <option>5</option> -->
 						</select>
 						<input class="btn btn-default btn-block btn-primary" type="button" value="Vote">
 					</form>
@@ -59,18 +59,6 @@
 			}).then(function(json){
 				
 				var doughnutData = json.options;
-				/*[			
-				    {
-				      "label": "Dog",
-				      "value": 1,
-				      "_id": "579742c7576c73a4193a92f9"
-				    },
-				    {
-				      "label": "Cat",
-				      "value": 10,
-				      "_id": "579742c7576c73a4193a92f8"
-				    }
-				];*/
 				var ctx = document.getElementById("chart-area").getContext("2d");
 				window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
 
@@ -80,8 +68,16 @@
 				pollName.innerHTML = json.name;
 				createdBy.innerHTML = json.createdBy;
 				
+				var select = document.querySelector("select")
 				
-				
+				for(var option in doughnutData){
+					console.log(doughnutData[option].label);
+					var opt = document.createElement("option");
+					opt.innerHTML = doughnutData[option].label;
+					opt.style.color = doughnutData[option].color;
+					opt.style.fontWeight = "bolder";
+					select.appendChild(opt);
+				}
 			})
 
 			
