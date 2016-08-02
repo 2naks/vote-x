@@ -1,5 +1,5 @@
 body{
-	height: 100%;
+	
 }
 .intro{
 	margin-top: 50px;
@@ -41,7 +41,7 @@ footer{
 }
 
 .change-password {
-	padding-top: 100px;
+	margin-top: 100px;
 	padding-bottom: 300px;
 }
 
@@ -84,6 +84,10 @@ footer{
 }
 .vote-container button{
 	margin-top: 10px;
+}
+
+.alert{
+	text-align: center;
 }
 
 /* Use Media Queries to fix footer at the bottom for different screen

@@ -1,12 +1,22 @@
 <%- include('./partials/header') -%>
 
-<% if(messages.error){ %>
-  <p><%= messages.error %></p>
-<% } %>
-<% if(messages.success){ %>
-  <p><%= messages.success %></p>
-<% } %>
+
 <form class="container change-password password-container" action="" method="POST">
+
+  <!--FLASH-->
+  <% if(messages.error){%>
+      <div class="container alert alert-danger alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+         <strong> <%= messages.error %> </strong> 
+      </div>
+    <% }else if(messages.success){%>
+      <div class="container alert alert-success alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+         <strong> <%= messages.success %> </strong> 
+      </div>
+    <% }%>
+    <!--FLASH-->
+
   <h1>Change Password</h1>
   <div class="form-group">
     <label for="currentPassword">CurrentPassword</label>

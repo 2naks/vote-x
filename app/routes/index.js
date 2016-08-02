@@ -78,10 +78,11 @@ module.exports = function (app, passport) {
 		});*/
 
 
-	app.route('/vote')
-		.get(function (req, res) {
+	app.route('/polls/:slug/vote')
+		/*.get(function (req, res) {
 			res.render(path + '/views/vote.ejs', {title:"Welcome"});
-		});
+		})*/
+		.post(userController.postVote);
 
 	app.route('/pollsuccess')
 		.get(isLoggedIn, function (req, res, next) {

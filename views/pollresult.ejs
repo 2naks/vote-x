@@ -10,11 +10,24 @@
 				</div>
 			</div>
 		</div>
+		
+		<% if(messages.failure){%>
+			<div class="container alert alert-danger alert-dismissible" role="alert">
+	  			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	 			 <strong> <%= messages.failure %> </strong> 
+			</div>
+		<% } else if(messages.success){%>
+			<div class=" container alert alert-success alert-dismissible" role="alert">
+	  			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	 			 <strong><%= messages.success %> </strong> 
+	 		</div>
+		<% } %>
 
 		<div class="container vote-container">
+
 			<div class="row">
 				<div class="col-md-5">
-					<p id="pollName" class="h3">What is the name of your pet?</p><span class="h6"><br>by <span id="createdBy">Emmanuel</span></span>
+					<p id="pollName" class="h3"> LOADING ... </p><span class="h6"><br>by <span id="createdBy"> </span></span>
 					<div id="canvas-holder">
 						<canvas id="chart-area" width="500" height="500">
 					</div>
@@ -22,18 +35,23 @@
 				<div class="col-md-7 form">
 					
 
-					<form>
+					<form method="POST">
 						<h4>Options</h4>
-						<select multiple class="form-control">
+						<select  class="form-control" name="choice">
 						 <!-- <option>1</option>
 						  <option>2</option>
 						  <option>3</option>
 						  <option>4</option>
 						  <option>5</option> -->
 						</select>
-						<input class="btn btn-default btn-block btn-primary" type="button" value="Vote">
+
+						<input id="custom-option" name="customChoice" class="form-control" type="hidden" placeholder="New Option">
+
+						<input  class="btn btn-default btn-block btn-primary" type="submit" value="Vote">
+
 					</form>
-					<button class="btn btn-default btn-block btn-primary">Share</button>
+					<a id="fbShare" href="" target="_blank"><button class="btn btn-default btn-block btn-primary">Share on Facebook</button></a>
+
 				</div>
 				
 				
@@ -43,54 +61,61 @@
 		<script type="text/javascript" src="/public/js/fetch.js"></script>
 		<script>
 			window.onload = function(){
+			var form = document.querySelector("form");
+			form.action = "/polls/" + window.location.pathname.substring(7) + "/vote";
 
-		fetch('/pollapi/' + window.location.pathname.substring(7),{
- 			 credentials: 'same-origin'
-			}).then(function(response){
+			fetch('/pollapi/' + window.location.pathname.substring(7),{
+	 			 credentials: 'same-origin'
+				}).then(function(response){
+					return response.json();
+				}).then(function(json){
+					
+					var doughnutData = json.options;
+					var ctx = document.getElementById("chart-area").getContext("2d");
+					window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
 
-				console.log("Result: " + "Gotten");
-				console.log(response)
+					var pollName = document.querySelector('#pollName');
+					var createdBy = document.querySelector('#createdBy');
 
-				
-				 
-				return response.json();
+					pollName.innerHTML = json.name;
+					createdBy.innerHTML = json.createdBy;
+					
+					
+					var select = document.querySelector("select")
+					
+					
 
+					for(var option in doughnutData){
+						console.log(doughnutData[option].label);
+						var opt = document.createElement("option");
+						opt.innerHTML = doughnutData[option].label;
+						opt.style.color = doughnutData[option].color;
+						opt.style.fontWeight = "bolder";
+						select.appendChild(opt);
+					}
 
-			}).then(function(json){
-				
-				var doughnutData = json.options;
-				var ctx = document.getElementById("chart-area").getContext("2d");
-				window.myDoughnut = new Chart(ctx).Doughnut(doughnutData, {responsive : true});
+					document.querySelector("#fbShare").href = "https://www.facebook.com/sharer/sharer.php?u=" + decodeURIComponent(window.location);
 
-				var pollName = document.querySelector('#pollName');
-				var createdBy = document.querySelector('#createdBy');
-
-				pollName.innerHTML = json.name;
-				createdBy.innerHTML = json.createdBy;
-				
-				var select = document.querySelector("select")
-				
-				for(var option in doughnutData){
-					console.log(doughnutData[option].label);
-					var opt = document.createElement("option");
-					opt.innerHTML = doughnutData[option].label;
-					opt.style.color = doughnutData[option].color;
-					opt.style.fontWeight = "bolder";
-					select.appendChild(opt);
-				}
-			})
-
-			
-		
+					var customOpt = document.createElement("option");
+						customOpt.innerHTML = "<% if(user){%>--Add New Option--<%}%>";
+						customOpt.style.fontWeight = "bolder";
+						select.appendChild(customOpt);
 
 
-			
-
+				})
 			
 				
 			};
 
-
+			document.querySelector("select").addEventListener("change", function(evt){
+				console.log(evt.target.value);
+				if(evt.target.value == "--Add New Option--"){
+					console.log("Its the same ooo");
+					document.querySelector("#custom-option").type = "text";
+				}else{
+					document.querySelector("#custom-option").type = "hidden";
+				}
+			});
 
 
 	</script>

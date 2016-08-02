@@ -1,9 +1,8 @@
+'use strict';
 var User = require(process.cwd() + '/app/models/users.js');
 var bcrypt = require('bcrypt-nodejs');
 var slug = require('slugid');
-
-
-
+var requestIp = require('request-ip');
 
 function UserController(passport){
 
@@ -18,7 +17,7 @@ function UserController(passport){
 
 		User.findOne({email: req.body.email}, function(err, existingUser){
 			if (existingUser){
-				req.flash('error', 'Email already exists.Try Again')
+				req.flash('errors', 'Email already exists.Try another email')
 				res.redirect('/signup');
 			}
 			user.save(function(err){
@@ -40,14 +39,14 @@ function UserController(passport){
 	this.postLogin = function(req, res,next){
 		console.log("postLogin");
 		console.log(req.body);
-		passport.authenticate('local', function(err, user, info) {
+		passport.authenticate('local', function(err, user) {
 			if (err) {
 				console.log("err");
 				return next(err);
 			}
 			if (!user) {
 				console.log("no user");
-				req.flash('errors', info);
+				req.flash('errors', "Invalid Email or Password");
 				return res.redirect('/login');
 			}
 			req.logIn(user, function(err) {
@@ -58,7 +57,7 @@ function UserController(passport){
 				req.flash('success', {
 					msg: 'Success! You are logged in.'
 				});
-				res.redirect(req.session.returnTo || '/');
+				res.redirect('/');
 			});
 		})(req, res, next);
 	}
@@ -107,7 +106,9 @@ function UserController(passport){
 				console.log(req.body)
 				var pollOptions = [];
 				req.body.options.forEach(function(option){
-					pollOptions.push({label: option, value: 1});
+					if(option.trim() != ''){
+						pollOptions.push({label: option, value: 0});
+					}
 				});
 				console.log(pollOptions);
 				var slugID = slug.nice();
@@ -128,7 +129,12 @@ function UserController(passport){
 
 		User.findOne({'polls.slug': req.params.slug}, function(err, user){
 			if(err){
+				console.log("ERROR");
 				throw err;
+			}
+
+			if(user == null){
+				return res.json({'name':"<b>ERROR: POLL NOT FOUND</>"});
 			}
 			
 
@@ -171,6 +177,99 @@ function UserController(passport){
 			res.redirect('/mypolls');
 		});
 	}
+
+	this.postVote = function(req, res, next){
+		var userIP = requestIp.getClientIp(req);
+		var vote = req.body;
+
+		console.log(req.body);
+
+		if(req.body.choice == '' || ((req.body.choice == "--Add New Option--") && (req.body.customChoice.trim() ==''))){
+			req.flash('failure', 'Blank vote. You have to make a choice!');
+			return res.redirect('/polls/' + req.params.slug);
+
+		}
+
+		User.findOne({'polls.slug': req.params.slug}, function(err, user){
+			if(err){
+				throw err;
+			}
+
+			if(user == null){
+				return res.send("<h1><b>ERROR: POLL NOT FOUND<b/></h1>");
+			}
+
+			user.polls.forEach(function(poll){
+				if(poll.slug == req.params.slug){
+
+					if(req.isAuthenticated()){
+						console.log(req.user.email);
+						console.log(poll.voters);
+						for(var i=0; i<poll.voters.length; i++){
+							console.log("hello")
+							if(poll.voters[i].name == req.user.email){
+								req.flash('failure', 'You cannot vote twice!');
+								return res.redirect('/polls/' + req.params.slug);
+							}
+						}	
+					}else{
+						console.log(userIP);
+						console.log(poll.voters);
+						for(var i=0; i<poll.voters.length; i++){
+							console.log("hello")
+							if(poll.voters[i].name == userIP){
+								req.flash('failure', 'You cannot vote twice!');
+								return res.redirect('/polls/' + req.params.slug);
+
+							}
+						}
+					}
+					
+
+					if(req.isAuthenticated()){
+						poll.voters.push({name: req.user.email});
+					}else{
+						poll.voters.push({name: userIP});
+					}
+					
+
+					if(req.body.choice == "--Add New Option--"){
+							console.log(req.body.customChoice);
+							console.log("GOT NEW OPTION");
+							poll.options.push({label: req.body.customChoice, value: 1});
+							user.save(function(err){
+								if(err){
+									throw err;
+								}
+								req.flash('success', 'Vote Success!');
+								return res.redirect('/polls/' + req.params.slug);
+							});
+						}
+					
+
+					
+					poll.options.forEach(function(option){
+						if(option.label == req.body.choice){
+							option.value += 1;
+
+							user.save(function(err){
+								if(err){
+									throw err;
+								}
+								req.flash('success', 'Vote Success!');
+								return res.redirect('/polls/' + req.params.slug);
+							});
+
+						}
+					});
+				}
+			});
+	
+		});
+
+	}
+
+
 }
 
 module.exports = UserController;

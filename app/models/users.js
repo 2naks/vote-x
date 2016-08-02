@@ -9,11 +9,16 @@ var PollOptionsSchema = new Schema({
 	value: Number
 });
 
+var VotersSchema = new Schema({
+	name: String
+});
+
 var PollSchema = new Schema({
 	name:String,
 	options:[PollOptionsSchema],
 	createdBy: String,
-	slug: String
+	slug: String,
+	voters:[VotersSchema]
 });
 
 var UserSchema = new Schema({
