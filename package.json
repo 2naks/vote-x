@@ -41,7 +41,8 @@
     "body-parser" :"*" ,
     "connect-mongo": "*" ,
     "dotenv" : "*" ,
-    "ejs" : "*" 
+    "ejs" : "*",
+    "morgan": "*"
 
   }
 }
