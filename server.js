@@ -26,7 +26,7 @@ app.use(session({
 	secret: 'secretClement',
 	resave: false,
 	saveUninitialized: true,
-	store: new MongoStore({url:process.env.MONGO_URI})
+	store: new MongoStore({url:process.env.MONGODB_URI})
 }));
 app.use(flash());
 app.use(passport.initialize());
@@ -36,16 +36,13 @@ app.use(function(req, res, next){
 	next();
 });
 
-/*app.use(function(req, res, next){
-	//if(path condition){req.session.returnTo = req.path;}
-});*/
 
 app.use('/controllers', express.static(process.cwd() + '/app/controllers'));
 app.use('/public', express.static(process.cwd() + '/public'));
 app.use('/common', express.static(process.cwd() + '/app/common'));
 
 
-mongoose.connect(process.env.MONGO_URI);
+mongoose.connect(process.env.MONGODB_URI);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
