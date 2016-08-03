@@ -38,7 +38,7 @@ window.onload = function() {
       document.querySelector("#fbShare").href = "https://www.facebook.com/sharer/sharer.php?u=" + decodeURIComponent(window.location);
 
       var customOpt = document.createElement("option");
-      customOpt.innerHTML = "<% if(user){%>--Add New Option--<%}%>";
+      customOpt.innerHTML = "--Add New Option--";
       customOpt.style.fontWeight = "bolder";
       select.appendChild(customOpt);
 
