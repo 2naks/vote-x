@@ -45,10 +45,7 @@ window.onload = function() {
 
    })
 
-
-};
-
-document.querySelector("select").addEventListener("change", function(evt) {
+   document.querySelector("select").addEventListener("change", function(evt) {
    console.log(evt.target.value);
    if (evt.target.value == "--Add New Option--") {
       console.log("Its the same ooo");
@@ -57,3 +54,6 @@ document.querySelector("select").addEventListener("change", function(evt) {
       document.querySelector("#custom-option").type = "hidden";
    }
 });
+   
+};
+
