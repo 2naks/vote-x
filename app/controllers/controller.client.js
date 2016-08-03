@@ -19,6 +19,7 @@ window.onload = function() {
       var createdBy = document.querySelector('#createdBy');
 
       pollName.innerHTML = json.name;
+      document.title = json.name;
       createdBy.innerHTML = json.createdBy;
 
 
@@ -54,6 +55,6 @@ window.onload = function() {
       document.querySelector("#custom-option").type = "hidden";
    }
 });
-   
+
 };
 
