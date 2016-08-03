@@ -19,7 +19,7 @@ window.onload = function() {
       var createdBy = document.querySelector('#createdBy');
 
       pollName.innerHTML = json.name;
-      document.title = json.name;
+      document.title = "Poll - " + json.name;
       createdBy.innerHTML = json.createdBy;
 
 
