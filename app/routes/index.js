@@ -11,13 +11,14 @@ module.exports = function (app, passport) {
 		if (req.isAuthenticated()) {
 			return next();
 		} else {
+			console.log(res.locals.user);
 			res.render(path + '/views/index.ejs', {title:"Welcome", user:null});
 		}
 	}
 
 
 	app.route('/')
-		.get(isLoggedIn, function (req, res) {
+		.get(userController.getAllPolls, isLoggedIn, function (req, res) {
 			res.render(path + '/views/index.ejs', {title:"Welcome"});
 		});
 
@@ -62,7 +63,7 @@ module.exports = function (app, passport) {
 		});
 
 	app.route('/newpoll')
-		.get(isLoggedIn, function (req, res) {
+		.get(userController.getAllPolls,isLoggedIn, function (req, res) {
 			res.render(path + '/views/index.ejs', {title:"Welcome"});
 		})
 		.post(isLoggedIn, userController.postNewPoll);
@@ -71,11 +72,6 @@ module.exports = function (app, passport) {
 		.get(function (req, res) {
 			res.render(path + '/views/pollsuccess.ejs', {title:"Welcome"});
 		});
-
-	/*app.route('/pollresult')
-		.get(function (req, res) {
-			res.render(path + '/views/pollresult.ejs', {title:"Welcome"});
-		});*/
 
 
 	app.route('/polls/:slug/vote')
@@ -90,16 +86,32 @@ module.exports = function (app, passport) {
 		});
 
 	app.route('/polls/:slug')
-		.get(function(req, res){
+		.get(userController.getAllPolls,function(req, res){
 			res.render(path + '/views/pollresult.ejs', {title:"Welcome"});
 		});
 
 	app.route('/pollapi/mypolls')
 		.get(isLoggedIn, userController.getMyPolls);	
 
+	app.route('/pollapi/allpolls')
+		.get(userController.getAllPolls);
+
 	app.route('/pollapi/:slug')
 		.get(userController.getPoll);	
 
 	app.route('/delete/polls/:slug')
 		.get(userController.getDeletePoll);
+
+	app.route('/auth/facebook')
+		.get(passport.authenticate('facebook', {scope: ['email']}));
+
+
+	app.route('/auth/facebook/callback')
+		.get(passport.authenticate('facebook', {successRedirect: '/',
+												failureRedirect:'/login'}));
+
+
+
+	
 };
+

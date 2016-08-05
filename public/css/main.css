@@ -1,6 +1,7 @@
 body{
-	
-}
+	background-image: url(/public/img/subtle_white_mini_waves.png);
+	background-repeat: repeat;
+}	
 .intro{
 	margin-top: 50px;
 	margin-bottom: 50px;
@@ -14,16 +15,19 @@ body{
 	padding-bottom: 100px;
 }
 
-.feature .col-md-4{
-	margin-left:;
+.feature > div > div{
+	margin-bottom: 30px;
 }
 
 footer{
 	text-align: center;
-	colour: white;
+	colour: black;
 	width: 100%;
 	height:  50px;
-	background-color: black;
+	background-color: transparent;
+	border-top-style: solid;
+	border-top-width: 1px;
+	
 
 	
 }
@@ -38,6 +42,10 @@ footer{
 
 .mypolls{
 	padding-top: 50px;
+}
+
+.mypolls > h3{
+	text-align: center;
 }
 
 .change-password {
@@ -88,6 +96,14 @@ footer{
 
 .alert{
 	text-align: center;
+}
+
+.list-group{
+	text-align: center;
+	padding-right: 0 !important;
+	border-radius: 15px;
+	background-color: lavender;
+
 }
 
 /* Use Media Queries to fix footer at the bottom for different screen

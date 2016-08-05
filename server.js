@@ -17,7 +17,7 @@ var app = express();
 app.set('view engine', 'ejs');
 
 require('dotenv').load();
-require('./app/config/passport.js')(passport);
+require('./app/config/passport.js')(passport,app);
 
 //app.use(logger('dev'));
 app.use(bodyParser.json());

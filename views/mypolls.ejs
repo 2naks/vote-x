@@ -14,7 +14,7 @@
 		</div>
 
 		<div id="mypolls" class = "container list-group-container mypolls">
-
+					<h3 id="myPollsHeader">Loading...</h3>
 				  <!--<a><li class='list-group-item'>
 					<span class=' badge btn btn-default'>Delete</span>
 					    Cras justo odio
@@ -51,8 +51,15 @@
 
 			}).then(function(json){
 				console.log(json);
+				if(json.length == 0){
+					document.querySelector("#myPollsHeader").innerHTML = "You have no polls";
+				}else{
+					document.querySelector("#myPollsHeader").innerHTML = "My Polls";
+				}
+				
 				json.forEach(function(poll){
 					console.log(poll.name);
+
 					var list = document.createElement("li");
 					list.className = "list-group-item";
 					list.innerHTML = "<span class='badge btn btn-default'><a href="+'/delete/polls/' + poll.slug+">Delete</a></span>" + "<a href="+'/polls/' + poll.slug +">" + poll.name ;

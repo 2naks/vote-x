@@ -25,7 +25,9 @@ var UserSchema = new Schema({
 	name: {type: String},
 	email: {type: String, required: true, lowercase: true, unique: true},
 	password: String,
-	polls:[PollSchema]
+	polls:[PollSchema],
+
+	facebookID: String
 
 });
 

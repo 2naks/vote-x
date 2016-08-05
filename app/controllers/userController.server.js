@@ -41,11 +41,9 @@ function UserController(passport){
 		console.log(req.body);
 		passport.authenticate('local', function(err, user) {
 			if (err) {
-				console.log("err");
 				return next(err);
 			}
 			if (!user) {
-				console.log("no user");
 				req.flash('errors', "Invalid Email or Password");
 				return res.redirect('/login');
 			}
@@ -265,6 +263,29 @@ function UserController(passport){
 				}
 			});
 	
+		});
+
+	}
+
+
+	//GET all polls
+	this.getAllPolls = function(req, res, next){
+		User.find({},function(err, users){
+			if(err){
+				throw err;
+			}
+
+			var allPolls = [];
+
+			users.forEach(function(user){
+				user.polls.forEach(function(poll){
+					allPolls.push({name:poll.name, slug:poll.slug});
+				});
+			});
+			console.log(allPolls);
+			res.locals.allPolls = allPolls;
+			return next();
+		
 		});
 
 	}

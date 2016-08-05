@@ -55,7 +55,7 @@
 						<input  class="btn btn-default btn-block btn-primary" type="submit" value="Vote">
 
 					</form>
-					<a id="fbShare" href="" target="_blank"><button class="btn btn-default btn-block btn-primary">Share on Facebook</button></a>
+					<a id="fbShare" href="" target="_blank"><button class="btn btn-default btn-block btn-primary"><i class="fa fa-facebook-square"></i> Share on Facebook</button></a>
 
 				</div>
 				
@@ -63,6 +63,18 @@
 			</div>
 
 		</div>
+
+		<% if(allPolls){ %>
+			<div class="list-group container">
+			<h3>Featured Polls</h3>
+
+			<% allPolls.forEach(function(poll){ %>
+				<a href=<%= "/polls/" + poll.slug %> class="list-group-item"><%= poll.name %></a>
+			<% });%>
+
+
+		</div>
+		<% } %>
 		
 		
 	<%- include('./partials/footer') -%>
